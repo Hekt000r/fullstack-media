@@ -11,6 +11,7 @@ import { fileURLToPath } from "url"
 import { error } from "console"
 import authRoutes from "./routes/auth"
 import { register } from "./controllers/auth"
+import { verifyToken } from "./middleware/auth"
 
 
 // config
