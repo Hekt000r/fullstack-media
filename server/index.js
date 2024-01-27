@@ -9,10 +9,10 @@ import morgan from "morgan"
 import path from "path"
 import { fileURLToPath } from "url"
 import { error } from "console"
-import authRoutes from "./routes/auth"
-import { register } from "./controllers/auth"
-import { verifyToken } from "./middleware/auth"
-
+import authRoutes from "./routes/auth.js"
+import { register } from "./controllers/auth.js"
+import { verifyToken } from "./middleware/auth.js"
+import userRoutes from "./routes/user.js"
 
 // config
 const __filename = fileURLToPath(import.meta.url)
@@ -40,16 +40,17 @@ const storage = multer.diskStorage({
 const upload = multer({storage})
 
 // routes
-
+app.use("/auth", authRoutes);
+app.use("/users", userRoutes);
 // file routes
 app.post("/auth/register", upload.single("picture"), register)
-// other
-app.use("/auth", authRoutes);
+
+
 //setup mongoose
 
 const PORT = process.env.PORT || 6001
 mongoose.connect(process.env.MONGO_URL, {}).then(() => {
-    app.listen(PORT, () => {console.log("Connected at port", PORT)})
+    app.listen(PORT, () => {console.log("Connected at port", PORT, "http://localhost:3001")})
 }).catch((err) => {
     console.log("An error has occurred:", err)
 })
