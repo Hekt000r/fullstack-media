@@ -13,6 +13,8 @@ import authRoutes from "./routes/auth.js"
 import { register } from "./controllers/auth.js"
 import { verifyToken } from "./middleware/auth.js"
 import userRoutes from "./routes/user.js"
+import postRoutes from "./routes/posts.js"
+import {createPost} from "./controllers/posts.js"
 
 // config
 const __filename = fileURLToPath(import.meta.url)
@@ -42,15 +44,17 @@ const upload = multer({storage})
 // routes
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
+app.use("/posts", postRoutes);
+
 // file routes
 app.post("/auth/register", upload.single("picture"), register)
-
+app.post("/posts", verifyToken, upload.single("picture"), createPost)
 
 //setup mongoose
 
 const PORT = process.env.PORT || 6001
 mongoose.connect(process.env.MONGO_URL, {}).then(() => {
-    app.listen(PORT, () => {console.log("Connected at port", PORT, "http://localhost:3001")})
+    app.listen(PORT, () => {console.log("Connected at port", PORT, "http://localhost:" + PORT)})
 }).catch((err) => {
     console.log("An error has occurred:", err)
 })
